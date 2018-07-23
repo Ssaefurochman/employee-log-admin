@@ -49,10 +49,7 @@ export default {
       'toggleDrawer'
     ]),
     logout(){
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user_id');
-      localStorage.removeItem('ttl');
-      localStorage.removeItem('user_data');
+      localStorage.clear();
       return this.$router.push('/login');
     }
   }

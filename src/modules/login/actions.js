@@ -16,7 +16,11 @@ export default {
 
       const role = userData.role[0];
 
-      localStorage.clear();
+      localStorage.setItem('access_token', data.id);
+      localStorage.setItem('user_id', data.userId);
+      localStorage.setItem('ttl', data.ttl);
+      localStorage.setItem('user_data', JSON.stringify(userData));
+      context.commit('reset');
       router.push('/');
     } catch (e) {
       console.log(e);
