@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import Vuelidate from 'vuelidate'
 import Notifications from 'vue-notification';
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 import App from './App.vue'
 import router from './router'
@@ -21,6 +23,11 @@ Vue.use(Vuetify, {
 });
 Vue.use(Vuelidate);
 Vue.use(Notifications);
+Vue.use(VueAxios, axios)
+
+Vue.axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL
+Vue.axios.defaults.headers.common['Authorization'] = localStorage.getItem("access_token")
+Vue.axios.defaults.timeout = 30000
 
 new Vue({
   router,
