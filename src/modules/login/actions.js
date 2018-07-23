@@ -19,7 +19,7 @@ export default {
       localStorage.setItem('access_token', data.id);
       localStorage.setItem('user_id', data.userId);
       localStorage.setItem('ttl', data.ttl);
-      localStorage.setItem('role', role.name);
+      localStorage.setItem('user_data', JSON.stringify(userData));
       context.commit('reset');
       router.push('/');
     } catch (e) {
