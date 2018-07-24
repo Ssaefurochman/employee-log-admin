@@ -18,9 +18,9 @@ export default {
       }
     });
   },
-  editJournal: (accessToken, formData, userId) => {
+  editJournal: (accessToken, formData, journalId) => {
     // Bisa digunakan untuk Edit data / Soft Delete
-    return Vue.axios.patch(`/journals/${userId}`, formData, {
+    return Vue.axios.patch(`/journals/${journalId}`, formData, {
       params: {
         access_token: accessToken
       }

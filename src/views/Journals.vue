@@ -296,8 +296,22 @@
           console.log(e);
         }
       },
-      patchData () {
+      async patchData () {
         // PATCH Request
+        try {
+          const formData = {
+            title: this.editedItem.title,
+            description: this.editedItem.description,
+            date: this.editedItem.date,
+            time: this.editedItem.time
+          };
+          const journalId = this.editedItem.id;
+          
+          let { data } = await editJournal(this.accessToken, formData, journalId);
+          Object.assign(this.datas[this.editedIndex], data)
+        } catch (e) {
+          console.log(e);
+        }
       },
       async deleteRequest () {
         // DELETE Request
@@ -317,7 +331,9 @@
       },
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.datas[this.editedIndex], this.editedItem)
+          console.log('edit Data', this.editedItem);
+          this.patchData();
+          // Object.assign(this.datas[this.editedIndex], this.editedItem)
         } else {
           this.postData();
         }
