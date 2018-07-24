@@ -27,6 +27,26 @@
     data: () => ({
 
     }),
+    created () {
+      console.log('App Created');
+
+      if (!this.accessToken) {
+        // Set global auth state on page refresh
+        
+        const accessToken = localStorage.getItem("access_token");
+        const userData = JSON.parse(localStorage.getItem("user_data"));
+        const userId = localStorage.getItem("user_id");
+
+        this.$store.commit('auth/setAuthData', { userData, userId, accessToken });
+
+        console.log('auth data is set', this.$store.state.auth);
+      }
+    },
+    computed: {
+      accessToken () {
+        return this.$store.state.auth.accessToken
+      }
+    },
     components: {
       NavigationDrawer,
       Toolbar,
