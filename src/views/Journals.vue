@@ -116,7 +116,7 @@
             </div>
             <div v-else>
               <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-              <v-btn type="submit" color="blue darken-1" flat @click.native="save">Save</v-btn>
+              <v-btn type="submit" color="blue darken-1" flat @click.prevent="save">Save</v-btn>
             </div>
           </v-card-actions>
         </v-card>
@@ -130,12 +130,10 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.index + 1 }}</td>
-        <td></td>
-        <td class="text-xs-right"></td>
-        <td class="text-xs-right"></td>
-        <td class="text-xs-right">
-          <!-- <v-switch label="" :input-value="props.item.is_active" @change="softDeleteItem(props.item)" ></v-switch> -->
-        </td>
+        <td class="text-xs-right">{{ props.item.title }}</td>
+        <td class="text-xs-right">{{ props.item.date }}</td>
+        <td class="text-xs-right">{{ props.item.time }}</td>
+        <td>{{ props.item.created_at }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
@@ -167,11 +165,11 @@
           sortable: false,
           value: 'name'
         },
-        { text: 'Judul Jurnal', value: 'calories' },
-        { text: 'Tanggal', value: 'fat' },
-        { text: 'Pukul', value: 'carbs' },
-        { text: 'Dibuat Tanggal', value: 'protein' },
-        { text: 'Actions', value: 'name', sortable: false }
+        { text: 'Judul Jurnal', value: 'title' },
+        { text: 'Tanggal', value: 'date' },
+        { text: 'Pukul', value: 'time' },
+        { text: 'Dibuat Tanggal', value: 'created_at' },
+        { text: 'Actions', value: 'actions', sortable: false }
       ],
       loading: false,
       saveLoading: false,
@@ -215,18 +213,17 @@
     },
     methods: {
       async loadData () {
-        console.log(this.accessToken);
         let { data } = await getJournal(this.accessToken);
         this.datas = data;
       },
       editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
+        this.editedIndex = this.datas.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
       deleteItem (item) {
-        const index = this.desserts.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+        const index = this.datas.indexOf(item)
+        confirm('Are you sure you want to delete this item?') && this.datas.splice(index, 1)
       },
       close () {
         this.dialog = false
@@ -237,9 +234,9 @@
       },
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
+          Object.assign(this.datas[this.editedIndex], this.editedItem)
         } else {
-          this.desserts.push(this.editedItem)
+          this.datas.push(this.editedItem)
         }
         this.close()
       }
