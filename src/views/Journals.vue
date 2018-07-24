@@ -259,10 +259,11 @@
         let { data } = await getJournal(this.accessToken, this.userId);
         this.datas = data;
       },
-      formatDate (date) {
-        return moment(date).format('DD MMMM YYYY');
+      formatDate (date, format = 'DD MMMM YYYY') {
+        return moment(date).format(format);
       },
       editItem (item) {
+        item.date = this.formatDate(item.date, 'YYYY-MM-DD');
         this.editedIndex = this.datas.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
@@ -311,7 +312,6 @@
       validate () {
         this.$v.$touch();
         if (!this.$v.$invalid) {
-          console.log('validation success');
           this.save();
         }
       },
