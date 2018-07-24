@@ -46,6 +46,9 @@
               label="Judul Jurnal"
               type="text"
               prepend-icon="title"
+              :error-messages="titleErrors"
+              @input="$v.editedItem.title.$touch()"
+              @blur="$v.editedItem.title.$touch()"
             ></v-text-field>
             <v-textarea
               v-model="editedItem.description"
@@ -54,6 +57,9 @@
               label="Deskripsi"
               auto-grow
               prepend-icon="description"
+              :error-messages="descErrors"
+              @input="$v.editedItem.description.$touch()"
+              @blur="$v.editedItem.description.$touch()"
             ></v-textarea>
             <v-menu
               ref="dateMenu"
@@ -74,6 +80,9 @@
                 label="Tanggal"
                 prepend-icon="event"
                 readonly
+                :error-messages="dateErrors"
+                @input="$v.editedItem.date.$touch()"
+                @blur="$v.editedItem.date.$touch()"
               ></v-text-field>
               <v-date-picker v-model="editedItem.date" no-title scrollable>
                 <v-spacer></v-spacer>
@@ -100,6 +109,9 @@
                 label="Pukul"
                 prepend-icon="access_time"
                 readonly
+                :error-messages="timeErrors"
+                @input="$v.editedItem.time.$touch()"
+                @blur="$v.editedItem.time.$touch()"
               ></v-text-field>
               <v-time-picker
                 v-if="timePickerMenu"
@@ -116,7 +128,7 @@
             </div>
             <div v-else>
               <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-              <v-btn type="submit" color="blue darken-1" flat @click.prevent="save">Save</v-btn>
+              <v-btn type="submit" color="blue darken-1" flat @click.prevent="validate">Save</v-btn>
             </div>
           </v-card-actions>
         </v-card>
@@ -198,10 +210,28 @@
       formTitle () {
         return this.editedIndex === -1 ? 'Data Baru' : 'Edit Data'
       },
-      nameErrors () {
+      titleErrors () {
         const errors = [];
-        if (!this.$v.name.$dirty) return errors;
-        !this.$v.name.required && errors.push('Name is required.');
+        if (!this.$v.editedItem.title.$dirty) return errors;
+        !this.$v.editedItem.title.required && errors.push('Judul tidak boleh kosong!');
+        return errors;
+      },
+      descErrors () {
+        const errors = [];
+        if (!this.$v.editedItem.description.$dirty) return errors;
+        !this.$v.editedItem.description.required && errors.push('Deskripsi tidak boleh kosong!');
+        return errors;
+      },
+      dateErrors () {
+        const errors = [];
+        if (!this.$v.editedItem.date.$dirty) return errors;
+        !this.$v.editedItem.date.required && errors.push('Tanggal tidak boleh kosong!');
+        return errors;
+      },
+      timeErrors () {
+        const errors = [];
+        if (!this.$v.editedItem.time.$dirty) return errors;
+        !this.$v.editedItem.time.required && errors.push('Pukul tidak boleh kosong!');
         return errors;
       },
     },
@@ -212,6 +242,14 @@
     },
     created () {
       this.loadData();
+    },
+    validations: {
+      editedItem: {
+        title: { required },
+        description: { required },
+        date: { required },
+        time: { required }
+      }
     },
     methods: {
       async loadData () {
@@ -235,7 +273,11 @@
         }, 300)
       },
       validate () {
-
+        this.$v.$touch();
+        if (!this.$v.$invalid) {
+          console.log('validation success');
+          this.save();
+        }
       },
       save () {
         if (this.editedIndex > -1) {
@@ -243,6 +285,7 @@
         } else {
           this.datas.push(this.editedItem)
         }
+        this.$v.$reset()
         this.close()
       }
     }
