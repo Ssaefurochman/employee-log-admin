@@ -4,9 +4,9 @@
 
     <v-dialog v-model="dialogDelete" max-width="500px" persistent>
       <v-card>
-        <v-card-title>Delete Confirmation</v-card-title>
+        <v-card-title>Konfirmasi hapus</v-card-title>
         <v-card-text>
-          Are you sure want to delete this data ?
+          Apakah anda yakin ingin menghapus data ini ?
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -14,8 +14,8 @@
             <v-progress-circular indeterminate color="green"></v-progress-circular>
           </div>
           <div v-else>
-            <v-btn color="blue darken-1" flat @click.stop="dialogDelete=false">Cancel</v-btn>
-            <v-btn type="submit" color="blue darken-1" flat @click.stop="deleteItem">Delete</v-btn>
+            <v-btn color="blue darken-1" flat @click.stop="close">Cancel</v-btn>
+            <v-btn type="submit" color="blue darken-1" flat @click.stop="deleteRequest">Delete</v-btn>
           </div>
         </v-card-actions>
       </v-card>
@@ -150,7 +150,7 @@
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
           </v-btn>
-          <v-btn icon class="mx-0" @click.stop="dialogDelete = true; itemWillBeDeleted = props.item;">
+          <v-btn icon class="mx-0" @click.stop="deleteItem(props.item)">
             <v-icon color="pink">delete</v-icon>
           </v-btn>
         </td>
@@ -164,7 +164,7 @@
   import { required } from 'vuelidate/lib/validators';
   import moment from 'moment';
   import journalAPI from '../functions/Journals';
-  const { getJournal, insertJournal, editJournal } = journalAPI;
+  const { getJournal, insertJournal, editJournal, deleteJournal } = journalAPI;
 
   export default {
     data: () => ({
@@ -191,12 +191,14 @@
       datas: [],
       editedIndex: -1,
       editedItem: {
+        id: null,
         title: '',
         description: '',
         date: '',
         time: null
       },
       defaultItem: {
+        id: null,
         title: '',
         description: '',
         date: '',
@@ -265,12 +267,16 @@
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
-      deleteItem (item) {
-        const index = this.datas.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.datas.splice(index, 1)
+      deleteItem (item) {               
+        this.editedIndex = this.datas.indexOf(item);
+        this.editedItem = Object.assign({}, item)
+        this.dialogDelete = true;        
+        
+        // confirm('Are you sure you want to delete this item?') && this.datas.splice(index, 1)
       },
       close () {
-        this.dialog = false
+        this.dialog = false;
+        this.dialogDelete = false;
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
@@ -291,6 +297,16 @@
       },
       patchData () {
         // PATCH Request
+      },
+      async deleteRequest () {
+        // DELETE Request
+        try {
+          await deleteJournal(this.accessToken, this.editedItem.id);
+          this.datas.splice(this.editedIndex, 1);
+          this.close();
+        } catch (e) {
+          console.log(e);
+        }
       },
       validate () {
         this.$v.$touch();

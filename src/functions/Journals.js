@@ -25,5 +25,12 @@ export default {
         access_token: accessToken
       }
     })
+  },
+  deleteJournal: (accessToken, journalId) => {
+    return Vue.axios.delete(`/journals/${journalId}`, {
+      params: {
+        access_token: accessToken
+      }
+    })
   }
 };
