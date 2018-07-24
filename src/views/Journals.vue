@@ -1,6 +1,6 @@
 <template>
   <v-flex>
-    <v-flex tag="h1" class="headline">Categories</v-flex>
+    <v-flex tag="h1" class="headline">Data Jurnal Pegawai</v-flex>
 
     <v-dialog v-model="dialogDelete" max-width="500px" persistent>
       <v-card>
@@ -94,6 +94,10 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+  import journalAPI from '../functions/Journals';
+  const { getJournal } = journalAPI;
+
   export default {
     data: () => ({
       dialog: false,
@@ -132,6 +136,9 @@
       }
     }),
     computed: {
+      ...mapState('auth', {
+        accessToken: state => state.accessToken
+      }),
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
@@ -148,8 +155,14 @@
       }
     },
     created () {
+      this.loadData();
     },
     methods: {
+      async loadData () {
+        console.log(this.accessToken);
+        let { data } = await getJournal(this.accessToken);
+        this.datas = data;
+      },
       editItem (item) {
         this.editedIndex = this.desserts.indexOf(item)
         this.editedItem = Object.assign({}, item)
