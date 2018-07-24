@@ -4,12 +4,10 @@ export default (role) => {
       return [
         { icon: 'home', text: 'Home Direktur', action: '/' },
       ]
-      break;
     case 'manager':
       return [
         { icon: 'home', text: 'Home Manager', action: '/' },
       ]
-      break;
     case 'pegawai':
       return [
         { icon: 'home', text: 'Home', action: '/' },
@@ -23,19 +21,7 @@ export default (role) => {
           ]
         },
       ]
-      break;
     default:
-      return [
-        { icon: 'home', text: 'Home', action: '/' },
-        {
-          icon: 'category',
-          'icon-alt': 'category',
-          text: 'Category',
-          model: false,
-          children: [
-            { text: 'Show All Data', action: '/categories' }
-          ]
-        }
-      ]
+      return []
   }
 }
