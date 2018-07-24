@@ -4,6 +4,7 @@ import AdminTemplate from './AdminTemplate.vue'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue';
 import Categories from './views/Categories.vue';
+import Journals from './views/Journals.vue';
 
 Vue.use(Router)
 
@@ -43,6 +44,11 @@ export default new Router({
           path: 'categories',
           name: 'categories',
           component: Categories
+        },
+        {
+          path: 'journals',
+          name: 'journals',
+          component: Journals
         },
       ]
     }
