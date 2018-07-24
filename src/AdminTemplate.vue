@@ -28,11 +28,11 @@
 
     }),
     created () {
-      console.log('App Created');
+      console.log('App Created', this.accessToken);
 
       if (!this.accessToken) {
         // Set global auth state on page refresh
-        
+
         const accessToken = localStorage.getItem("access_token");
         const userData = JSON.parse(localStorage.getItem("user_data"));
         const userId = localStorage.getItem("user_id");

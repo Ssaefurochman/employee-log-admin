@@ -13,7 +13,7 @@
             <img src="https://randomuser.me/api/portraits/men/85.jpg" >
           </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title>John Leider</v-list-tile-title>
+            <v-list-tile-title>{{userData && userData.email}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -80,8 +80,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import GetMenus from '../functions/GetMenus';
+
 export default {
   computed: {
+    ...mapState('auth', {
+      userData: state => state.userData,
+      role: state => state.userData.role[0].name
+    }),
     drawer: {
       get () {
         return this.$store.state.drawer.show;
@@ -89,30 +96,21 @@ export default {
       set (val) {
         return this.$store.commit('drawer/toggleDrawer', val);
       }
+    },
+    items: function () {
+      return this.role ? GetMenus(this.role) : []
     }
   },
   data () {
-      return {
-        items: [
-          { icon: 'home', text: 'Home', action: '/' },
-          {
-            icon: 'category',
-            'icon-alt': 'category',
-            text: 'Category',
-            model: false,
-            children: [
-              { text: 'Show All Data', action: '/categories' }
-            ]
-          },
-          { icon: 'settings', text: 'Settings', action: '/settings' },
-        ]
-      }
-    },
-    methods: {
-      redirect(route) {
-        return this.$router.push(route);
-      }
+    return {
+
     }
+  },
+  methods: {
+    redirect(route) {
+      return this.$router.push(route);
+    }
+  }
 }
 </script>
 

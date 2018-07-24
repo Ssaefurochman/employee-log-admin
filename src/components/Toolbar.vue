@@ -48,8 +48,12 @@ export default {
     ...mapMutations('drawer', [
       'toggleDrawer'
     ]),
+    ...mapMutations('auth', [
+      'destroyAuthData'
+    ]),
     logout(){
       localStorage.clear();
+      this.destroyAuthData();
       return this.$router.push('/login');
     }
   }

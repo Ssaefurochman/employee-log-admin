@@ -5,10 +5,8 @@ export default {
     state.accessToken = accessToken;
   },
   destroyAuthData: (state) => {
-    state = {
-      userData: null,
-      accessToken: null,
-      userId: null
-    }
+    state.userData = null;
+    state.userId = null;
+    state.accessToken = null;
   }
 }
