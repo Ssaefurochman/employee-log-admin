@@ -28,8 +28,6 @@
 
     }),
     created () {
-      console.log('App Created', this.accessToken);
-
       if (!this.accessToken) {
         // Set global auth state on page refresh
 
