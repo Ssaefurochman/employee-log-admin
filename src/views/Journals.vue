@@ -149,6 +149,7 @@
 
 <script>
   import { mapState } from 'vuex';
+  import { required } from 'vuelidate/lib/validators';
   import journalAPI from '../functions/Journals';
   const { getJournal } = journalAPI;
 
@@ -231,6 +232,9 @@
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         }, 300)
+      },
+      validate () {
+
       },
       save () {
         if (this.editedIndex > -1) {
