@@ -143,6 +143,7 @@
       <template slot="items" slot-scope="props">
         <td>{{ props.index + 1 }}</td>
         <td class="text-xs-right">{{ props.item.title }}</td>
+        <td class="text-xs-right">{{ props.item.description }}</td>
         <td class="text-xs-right">{{ formatDate(props.item.date) }}</td>
         <td class="text-xs-right">{{ props.item.time }}</td>
         <td>{{ formatDate(props.item.created_at) }}</td>
@@ -180,6 +181,7 @@
           value: 'name'
         },
         { text: 'Judul Jurnal', value: 'title' },
+        { text: 'Deskripsi', value: 'description' },
         { text: 'Tanggal', value: 'date' },
         { text: 'Pukul', value: 'time' },
         { text: 'Dibuat Tanggal', value: 'created_at' },
