@@ -1,10 +1,13 @@
 import Vue from 'vue';
 
 export default {
-  getJournal: (accessToken) => {
+  getJournal: (accessToken, userId) => {
     return Vue.axios.get('/journals', {
       params: {
-        access_token: accessToken
+        access_token: accessToken,
+        filter: {
+          where: { user_id: userId }
+        }
       }
     });
   }

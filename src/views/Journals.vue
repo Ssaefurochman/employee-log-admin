@@ -192,7 +192,8 @@
     }),
     computed: {
       ...mapState('auth', {
-        accessToken: state => state.accessToken
+        accessToken: state => state.accessToken,
+        userId: state => state.userId
       }),
       formTitle () {
         return this.editedIndex === -1 ? 'Data Baru' : 'Edit Data'
@@ -214,7 +215,7 @@
     },
     methods: {
       async loadData () {
-        let { data } = await getJournal(this.accessToken);
+        let { data } = await getJournal(this.accessToken, this.userId);
         this.datas = data;
       },
       editItem (item) {
