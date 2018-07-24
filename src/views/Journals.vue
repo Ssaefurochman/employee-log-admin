@@ -39,19 +39,75 @@
             <span class="headline">{{ formTitle }}</span>
           </v-card-title>
           <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                  <v-text-field
-                    v-model="editedItem.name"
-                    required
-                    label="Category Name"
-                  >
-                  </v-text-field>
-                <!-- <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
-                </v-flex> -->
-              </v-layout>
-            </v-container>
+            <v-text-field
+              v-model="editedItem.title"
+              box
+              color="deep-purple"
+              label="Judul Jurnal"
+              type="text"
+              prepend-icon="title"
+            ></v-text-field>
+            <v-textarea
+              v-model="editedItem.description"
+              name="input-7-1"
+              box
+              label="Deskripsi"
+              auto-grow
+              prepend-icon="description"
+            ></v-textarea>
+            <v-menu
+              ref="dateMenu"
+              :close-on-content-click="false"
+              v-model="datePickerMenu"
+              :nudge-right="40"
+              :return-value.sync="editedItem.date"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                box
+                slot="activator"
+                v-model="editedItem.date"
+                label="Tanggal"
+                prepend-icon="event"
+                readonly
+              ></v-text-field>
+              <v-date-picker v-model="editedItem.date" no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="datePickerMenu = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="$refs.dateMenu.save(editedItem.date)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+            <v-menu
+              ref="timePickerMenu"
+              :close-on-content-click="false"
+              v-model="timePickerMenu"
+              :nudge-right="40"
+              :return-value.sync="editedItem.time"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              max-width="290px"
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="editedItem.time"
+                label="Pukul"
+                prepend-icon="access_time"
+                readonly
+              ></v-text-field>
+              <v-time-picker
+                v-if="timePickerMenu"
+                v-model="editedItem.time"
+                @change="$refs.timePickerMenu.save(editedItem.time)"
+                format="24hr"
+              ></v-time-picker>
+            </v-menu>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -100,6 +156,8 @@
 
   export default {
     data: () => ({
+      datePickerMenu: false,
+      timePickerMenu: false,
       dialog: false,
       dialogDelete: false,
       headers: [
@@ -121,18 +179,16 @@
       datas: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+        title: '',
+        description: '',
+        date: '',
+        time: null
       },
       defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+        title: '',
+        description: '',
+        date: '',
+        time: null
       }
     }),
     computed: {
@@ -140,7 +196,7 @@
         accessToken: state => state.accessToken
       }),
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Data Baru' : 'Edit Data'
       },
       nameErrors () {
         const errors = [];
