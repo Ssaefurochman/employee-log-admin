@@ -10,5 +10,20 @@ export default {
         }
       }
     });
+  },
+  insertJournal: (accessToken, formData) => {
+    return Vue.axios.post('/journals', formData, {
+      params: {
+        access_token: accessToken
+      }
+    });
+  },
+  editJournal: (accessToken, formData, userId) => {
+    // Bisa digunakan untuk Edit data / Soft Delete
+    return Vue.axios.patch(`/journals/${userId}`, formData, {
+      params: {
+        access_token: accessToken
+      }
+    })
   }
 };

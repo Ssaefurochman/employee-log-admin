@@ -163,7 +163,7 @@
   import { mapState } from 'vuex';
   import { required } from 'vuelidate/lib/validators';
   import journalAPI from '../functions/Journals';
-  const { getJournal } = journalAPI;
+  const { getJournal, insertJournal, editJournal } = journalAPI;
 
   export default {
     data: () => ({
@@ -272,6 +272,22 @@
           this.editedIndex = -1
         }, 300)
       },
+      async postData () {
+        // POST Request
+        try {
+          const formData = {
+            ...this.editedItem,
+            user_id: this.userId
+          }
+          let { data } = await insertJournal(this.accessToken, formData);
+          this.datas.push(data)
+        } catch (e) {
+          console.log(e);
+        }
+      },
+      patchData () {
+        // PATCH Request
+      },
       validate () {
         this.$v.$touch();
         if (!this.$v.$invalid) {
@@ -283,7 +299,7 @@
         if (this.editedIndex > -1) {
           Object.assign(this.datas[this.editedIndex], this.editedItem)
         } else {
-          this.datas.push(this.editedItem)
+          this.postData();
         }
         this.$v.$reset()
         this.close()
