@@ -48,7 +48,14 @@ export default new Router({
         {
           path: 'journals',
           name: 'journals',
-          component: Journals
+          component: Journals,
+          beforeEnter: (to, from, next) => {
+            const userData = JSON.parse(localStorage.getItem('user_data'));
+            if(userData.role[0].name !== 'pegawai'){
+              return next('/')
+            }
+            return next();
+          },
         },
       ]
     }
