@@ -143,9 +143,9 @@
       <template slot="items" slot-scope="props">
         <td>{{ props.index + 1 }}</td>
         <td class="text-xs-right">{{ props.item.title }}</td>
-        <td class="text-xs-right">{{ props.item.date }}</td>
+        <td class="text-xs-right">{{ formatDate(props.item.date) }}</td>
         <td class="text-xs-right">{{ props.item.time }}</td>
-        <td>{{ props.item.created_at }}</td>
+        <td>{{ formatDate(props.item.created_at) }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
@@ -162,6 +162,7 @@
 <script>
   import { mapState } from 'vuex';
   import { required } from 'vuelidate/lib/validators';
+  import moment from 'moment';
   import journalAPI from '../functions/Journals';
   const { getJournal, insertJournal, editJournal } = journalAPI;
 
@@ -255,6 +256,9 @@
       async loadData () {
         let { data } = await getJournal(this.accessToken, this.userId);
         this.datas = data;
+      },
+      formatDate (date) {
+        return moment(date).format('DD MMMM YYYY');
       },
       editItem (item) {
         this.editedIndex = this.datas.indexOf(item)
