@@ -1,6 +1,6 @@
 # Employee Log Admin
 
-The project is forked from my own repository (https://github.com/ranggarifqi/vuex-crud-simulation).
+The project is cloned from my own repository (https://github.com/ranggarifqi/vuex-crud-simulation).
 
 ## Description
 
@@ -39,4 +39,5 @@ Asumming that you're already inside `root` directory :
 3. The app will be available at `http://localhost:8080`
 
 ## Notes
-1. Production build not available yet
+1. Production build is not available yet
+2. Automated testing is not available yet
